@@ -25,7 +25,6 @@ my $swagger_types = {
       'type' => 'string',
       'status' => 'Status',
       'process' => 'boolean',
-      'test' => 'boolean',
       'conversion' => 'ARRAY[Conversion]',
       'input' => 'ARRAY[InputFile]',
       'callback' => 'string',
@@ -40,7 +39,6 @@ my $attribute_map = {
       'type' => 'type',
       'status' => 'status',
       'process' => 'process',
-      'test' => 'test',
       'conversion' => 'conversion',
       'input' => 'input',
       'callback' => 'callback',
@@ -63,8 +61,6 @@ sub new {
         'status' => $args{'status'}, 
         #Determine if the job must be processed as soon as it is ready.
         'process' => $args{'process'}, 
-        #Determine if it is a test job.
-        'test' => $args{'test'}, 
         #Type of conversion or conversions to be carried out.
         'conversion' => $args{'conversion'}, 
         #Source or sources of the files to be converted.

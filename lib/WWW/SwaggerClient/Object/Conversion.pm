@@ -20,12 +20,14 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
+      'id' => 'string',
       'target' => 'string',
       'category' => 'string',
       'options' => 'object'
 };
 
 my $attribute_map = {
+      'id' => 'id',
       'target' => 'target',
       'category' => 'category',
       'options' => 'options'
@@ -35,6 +37,8 @@ my $attribute_map = {
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
+        #Identifier for the job conversion.
+        'id' => $args{'id'}, 
         #Identifier for the job conversion type.
         'target' => $args{'target'}, 
         #Category for the conveted file.

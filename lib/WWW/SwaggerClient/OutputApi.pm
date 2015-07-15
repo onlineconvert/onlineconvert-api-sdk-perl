@@ -62,8 +62,8 @@ sub new {
     # 
     # @param string $conversion_id  (required)
     # @param string $input_id  (required)
-    # @param string $token Token for authentication. (required)
-    # @param string $key Api key for the user to filter. (required)
+    # @param string $x_oc_token Token for authentication for the current job (required)
+    # @param string $x_oc_api_key Api key for the user to filter. (required)
     # @param string $job_id ID of job that needs to be fetched (required)
     # @return ARRAY[OutputFile]
     #
@@ -99,13 +99,13 @@ sub new {
       }# query params
       if ( exists $args{'input_id'}) {
         $query_params->{'input_id'} = $self->{api_client}->to_query_value($args{'input_id'});
-      }# query params
-      if ( exists $args{'key'}) {
-        $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
       }
       # header params
-      if ( exists $args{'token'}) {
-        $header_params->{'token'} = $self->{api_client}->to_header_value($args{'token'});
+      if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+      }# header params
+      if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
       }
       # path params
       if ( exists $args{'job_id'}) {
@@ -137,8 +137,8 @@ sub new {
     #
     # Get information about an output file source.
     # 
-    # @param string $token Token for authentication. (required)
-    # @param string $key Api key for the user to filter. (required)
+    # @param string $x_oc_token Token for authentication for the current job (required)
+    # @param string $x_oc_api_key Api key for the user to filter. (required)
     # @param string $job_id ID of job that needs to be fetched (required)
     # @param string $file_id Id of the file to download (required)
     # @return ARRAY[OutputFile]
@@ -174,13 +174,13 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'key'}) {
-        $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
-      }
+      
       # header params
-      if ( exists $args{'token'}) {
-        $header_params->{'token'} = $self->{api_client}->to_header_value($args{'token'});
+      if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+      }# header params
+      if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
       }
       # path params
       if ( exists $args{'job_id'}) {
@@ -217,8 +217,8 @@ sub new {
     #
     # Deletes a file from the output.
     # 
-    # @param string $token Token for authentication. (required)
-    # @param string $key Api key for the user to filter. (required)
+    # @param string $x_oc_token Token for authentication for the current job (required)
+    # @param string $x_oc_api_key Api key for the user to filter. (required)
     # @param string $job_id ID of job that needs to be fetched (required)
     # @param string $file_id Id of the file to download (required)
     # @return ARRAY[OutputFile]
@@ -254,13 +254,13 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'key'}) {
-        $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
-      }
+      
       # header params
-      if ( exists $args{'token'}) {
-        $header_params->{'token'} = $self->{api_client}->to_header_value($args{'token'});
+      if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+      }# header params
+      if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
       }
       # path params
       if ( exists $args{'job_id'}) {

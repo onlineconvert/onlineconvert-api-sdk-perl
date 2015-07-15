@@ -61,8 +61,8 @@ sub new {
     #
     # Get list of conversions defined for the current job.
     # 
-    # @param string $token Token for authentication. (required)
-    # @param string $key Api key for the user to filter. (required)
+    # @param string $x_oc_token Token for authentication for the current job (required)
+    # @param string $x_oc_api_key Api key for the user to filter. (required)
     # @param string $job_id ID of job that needs to be fetched (required)
     # @return ARRAY[Conversion]
     #
@@ -92,13 +92,13 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'key'}) {
-        $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
-      }
+      
       # header params
-      if ( exists $args{'token'}) {
-        $header_params->{'token'} = $self->{api_client}->to_header_value($args{'token'});
+      if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+      }# header params
+      if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
       }
       # path params
       if ( exists $args{'job_id'}) {
@@ -131,8 +131,8 @@ sub new {
     # Adds a new conversion to the given job.
     # 
     # @param Conversion $body information for the conversion. (required)
-    # @param string $token Token for authentication. (required)
-    # @param string $key Api key for the user to filter. (required)
+    # @param string $x_oc_token Token for authentication for the current job (required)
+    # @param string $x_oc_api_key Api key for the user to filter. (required)
     # @param string $job_id ID of job that needs to be fetched (required)
     # @return Conversion
     #
@@ -167,13 +167,13 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'key'}) {
-        $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
-      }
+      
       # header params
-      if ( exists $args{'token'}) {
-        $header_params->{'token'} = $self->{api_client}->to_header_value($args{'token'});
+      if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+      }# header params
+      if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
       }
       # path params
       if ( exists $args{'job_id'}) {
@@ -208,8 +208,8 @@ sub new {
     #
     # Get list of conversions defined for the current job.
     # 
-    # @param string $token Token for authentication. (required)
-    # @param string $key Api key for the user to filter. (required)
+    # @param string $x_oc_token Token for authentication for the current job (required)
+    # @param string $x_oc_api_key Api key for the user to filter. (required)
     # @param string $job_id ID of job that needs to be fetched (required)
     # @param string $conversion_id Identifier for the job conversion. (required)
     # @return Conversion
@@ -245,13 +245,13 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'key'}) {
-        $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
-      }
+      
       # header params
-      if ( exists $args{'token'}) {
-        $header_params->{'token'} = $self->{api_client}->to_header_value($args{'token'});
+      if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+      }# header params
+      if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
       }
       # path params
       if ( exists $args{'job_id'}) {
@@ -288,8 +288,8 @@ sub new {
     #
     # Removes the conversion for a job.
     # 
-    # @param string $token Token for authentication. (required)
-    # @param string $key Api key for the user to filter. (required)
+    # @param string $x_oc_token Token for authentication for the current job (required)
+    # @param string $x_oc_api_key Api key for the user to filter. (required)
     # @param string $job_id ID of job that needs to be fetched (required)
     # @param string $conversion_id Identifier for the job conversion. (required)
     # @return Conversion
@@ -325,13 +325,13 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'key'}) {
-        $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
-      }
+      
       # header params
-      if ( exists $args{'token'}) {
-        $header_params->{'token'} = $self->{api_client}->to_header_value($args{'token'});
+      if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+      }# header params
+      if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
       }
       # path params
       if ( exists $args{'job_id'}) {

@@ -25,7 +25,7 @@ sub new
   my $class = shift;
   my (%args) = (
     'ua' => LWP::UserAgent->new,
-    'base_url' => 'http://api2.akokine.de',
+    'base_url' => 'http://api2.online-convert.com/',
     @_
   );
 
