@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::OutputFile;
+package WWW::SwaggerClient::Object::History;
 
 require 5.6.0;
 use strict;
@@ -20,7 +20,7 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 __PACKAGE__->class_documentation({description => '',
-                                  class => 'OutputFile',
+                                  class => 'History',
                                   required => [], # TODO
 }                                 );
 
@@ -28,35 +28,21 @@ __PACKAGE__->method_documentation({
     'id' => {
     	datatype => 'string',
     	base_name => 'id',
-    	description => 'Unique identifier for the file.',
+    	description => 'Unique identifier of the event.',
     	format => '',
     	read_only => '',
     		},
-    'source' => {
-    	datatype => 'OutputFile_source',
-    	base_name => 'source',
-    	description => '',
-    	format => '',
-    	read_only => '',
-    		},
-    'uri' => {
+    'status' => {
     	datatype => 'string',
-    	base_name => 'uri',
-    	description => 'Url for downloading the file.',
+    	base_name => 'status',
+    	description => 'Status of the job.',
     	format => '',
     	read_only => '',
     		},
-    'size' => {
-    	datatype => 'int',
-    	base_name => 'size',
-    	description => 'Size of the file in bytes.',
-    	format => '',
-    	read_only => '',
-    		},
-    'checksum' => {
+    'info' => {
     	datatype => 'string',
-    	base_name => 'checksum',
-    	description => 'Checksum of the file',
+    	base_name => 'info',
+    	description => 'Addtional information.',
     	format => '',
     	read_only => '',
     		},
@@ -72,19 +58,15 @@ __PACKAGE__->method_documentation({
 
 __PACKAGE__->swagger_types( {
     'id' => 'string',
-    'source' => 'OutputFile_source',
-    'uri' => 'string',
-    'size' => 'int',
-    'checksum' => 'string',
+    'status' => 'string',
+    'info' => 'string',
     'created_at' => 'DateTime'
 } );
 
 __PACKAGE__->attribute_map( {
     'id' => 'id',
-    'source' => 'source',
-    'uri' => 'uri',
-    'size' => 'size',
-    'checksum' => 'checksum',
+    'status' => 'status',
+    'info' => 'info',
     'created_at' => 'created_at'
 } );
 

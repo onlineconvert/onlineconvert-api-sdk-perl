@@ -30,21 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
-our @EXPORT_OK = qw(
-  jobs_get 
-  jobs_post 
-  jobs_job_id_get 
-  jobs_job_id_delete 
-  jobs_job_id_patch 
-  jobs_job_id_threads_get 
-  
-);
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
 
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -57,426 +50,667 @@ sub new {
 
 }
 
+
+#
+# jobs_get
+#
+# List of jobs active for the current user identified by the key.
+# 
+# @param string $status Filter the status of the job. (optional)
+# @param string $x_oc_token Token for authentication for the current job (optional)
+# @param string $x_oc_api_key Api key for the user to filter. (optional)
+# @param number $page Pagination for list of elements. (optional)
+{
+    my $params = {
+    'status' => {
+        data_type => 'string',
+        description => 'Filter the status of the job.',
+        required => '0',
+    },
+    'x_oc_token' => {
+        data_type => 'string',
+        description => 'Token for authentication for the current job',
+        required => '0',
+    },
+    'x_oc_api_key' => {
+        data_type => 'string',
+        description => 'Api key for the user to filter.',
+        required => '0',
+    },
+    'page' => {
+        data_type => 'number',
+        description => 'Pagination for list of elements.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ jobs_get } = { 
+    	summary => 'List of jobs active for the current user identified by the key.',
+        params => $params,
+        returns => 'ARRAY[Job]',
+        };
+}
+# @return ARRAY[Job]
+#
+sub jobs_get {
+    my ($self, %args) = @_;
+
     
-    #
-    # jobs_get
-    #
-    # List of jobs active for the current user identified by the key.
-    # 
-    # @param string $status Filter the status of the job. (required)
-    # @param string $x_oc_token Token for authentication for the current job (required)
-    # @param string $x_oc_api_key Api key for the user to filter. (required)
-    # @param number $page Pagination for list of elements. (required)
-    # @return ARRAY[Job]
-    #
-    sub jobs_get {
-      my ($self, %args) = @_;
 
-      
+    # parse inputs
+    my $_resource_path = '/jobs';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # parse inputs
-      my $_resource_path = '/jobs';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
-
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      # query params
-      if ( exists $args{'status'}) {
+    # query params
+    if ( exists $args{'status'}) {
         $query_params->{'status'} = $self->{api_client}->to_query_value($args{'status'});
-      }# query params
-      if ( exists $args{'page'}) {
+    }# query params
+    if ( exists $args{'page'}) {
         $query_params->{'page'} = $self->{api_client}->to_query_value($args{'page'});
-      }
-      # header params
-      if ( exists $args{'x_oc_token'}) {
+    }
+    # header params
+    if ( exists $args{'x_oc_token'}) {
         $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
-      }# header params
-      if ( exists $args{'x_oc_api_key'}) {
+    }# header params
+    if ( exists $args{'x_oc_api_key'}) {
         $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
-      }
-      
-      
-      my $_body_data;
-      
+    }
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('ARRAY[Job]', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # jobs_post
-    #
-    # Creates a new Job with the user key.
-    # 
-    # @param string $x_oc_api_key Api key for the user to filter. (required)
-    # @param Job $body Content of the job. (required)
-    # @return Job
-    #
-    sub jobs_post {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Job]', $response);
+    return $_response_object;
+    
+}
 
-      
-      # verify the required parameter 'x_oc_api_key' is set
-      unless (exists $args{'x_oc_api_key'}) {
-        croak("Missing the required parameter 'x_oc_api_key' when calling jobs_post");
-      }
-      
-      # verify the required parameter 'body' is set
-      unless (exists $args{'body'}) {
-        croak("Missing the required parameter 'body' when calling jobs_post");
-      }
-      
+#
+# jobs_post
+#
+# Creates a new Job with the user key.
+# 
+# @param string $x_oc_api_key Api key for the user to filter. (required)
+# @param Job $body Content of the job. (required)
+{
+    my $params = {
+    'x_oc_api_key' => {
+        data_type => 'string',
+        description => 'Api key for the user to filter.',
+        required => '1',
+    },
+    'body' => {
+        data_type => 'Job',
+        description => 'Content of the job.',
+        required => '1',
+    },
+    };
+    __PACKAGE__->method_documentation->{ jobs_post } = { 
+    	summary => 'Creates a new Job with the user key.',
+        params => $params,
+        returns => 'Job',
+        };
+}
+# @return Job
+#
+sub jobs_post {
+    my ($self, %args) = @_;
 
-      # parse inputs
-      my $_resource_path = '/jobs';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    
+    # verify the required parameter 'x_oc_api_key' is set
+    unless (exists $args{'x_oc_api_key'}) {
+      croak("Missing the required parameter 'x_oc_api_key' when calling jobs_post");
+    }
+    
+    # verify the required parameter 'body' is set
+    unless (exists $args{'body'}) {
+      croak("Missing the required parameter 'body' when calling jobs_post");
+    }
+    
 
-      my $_method = 'POST';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    # parse inputs
+    my $_resource_path = '/jobs';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    my $_method = 'POST';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      
-      # header params
-      if ( exists $args{'x_oc_api_key'}) {
+    
+    # header params
+    if ( exists $args{'x_oc_api_key'}) {
         $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
-      }
-      
-      
-      my $_body_data;
-      # body params
-      if ( exists $args{'body'}) {
+    }
+    
+    
+    my $_body_data;
+    # body params
+    if ( exists $args{'body'}) {
         $_body_data = $args{'body'};
-      }
+    }
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('Job', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # jobs_job_id_get
-    #
-    # Get information about a Job
-    # 
-    # @param string $x_oc_token Token for authentication for the current job (required)
-    # @param string $x_oc_api_key Api key for the user to filter. (required)
-    # @param string $job_id ID of job that needs to be fetched (required)
-    # @return Job
-    #
-    sub jobs_job_id_get {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('Job', $response);
+    return $_response_object;
+    
+}
 
-      
-      # verify the required parameter 'job_id' is set
-      unless (exists $args{'job_id'}) {
-        croak("Missing the required parameter 'job_id' when calling jobs_job_id_get");
-      }
-      
+#
+# jobs_job_id_get
+#
+# Get information about a Job
+# 
+# @param string $job_id ID of job that needs to be fetched (required)
+# @param string $x_oc_token Token for authentication for the current job (optional)
+# @param string $x_oc_api_key Api key for the user to filter. (optional)
+{
+    my $params = {
+    'job_id' => {
+        data_type => 'string',
+        description => 'ID of job that needs to be fetched',
+        required => '1',
+    },
+    'x_oc_token' => {
+        data_type => 'string',
+        description => 'Token for authentication for the current job',
+        required => '0',
+    },
+    'x_oc_api_key' => {
+        data_type => 'string',
+        description => 'Api key for the user to filter.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ jobs_job_id_get } = { 
+    	summary => 'Get information about a Job',
+        params => $params,
+        returns => 'Job',
+        };
+}
+# @return Job
+#
+sub jobs_job_id_get {
+    my ($self, %args) = @_;
 
-      # parse inputs
-      my $_resource_path = '/jobs/{job_id}';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    
+    # verify the required parameter 'job_id' is set
+    unless (exists $args{'job_id'}) {
+      croak("Missing the required parameter 'job_id' when calling jobs_job_id_get");
+    }
+    
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    # parse inputs
+    my $_resource_path = '/jobs/{job_id}';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      
-      # header params
-      if ( exists $args{'x_oc_token'}) {
+    
+    # header params
+    if ( exists $args{'x_oc_token'}) {
         $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
-      }# header params
-      if ( exists $args{'x_oc_api_key'}) {
+    }# header params
+    if ( exists $args{'x_oc_api_key'}) {
         $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
-      }
-      # path params
-      if ( exists $args{'job_id'}) {
+    }
+    # path params
+    if ( exists $args{'job_id'}) {
         my $_base_variable = "{" . "job_id" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'job_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('Job', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # jobs_job_id_delete
-    #
-    # Cancels a job created that haven't been started. (Allow to cancel jobs in process.)
-    # 
-    # @param string $x_oc_token Token for authentication for the current job (required)
-    # @param string $x_oc_api_key Api key for the user to filter. (required)
-    # @param string $job_id ID of job that needs to be fetched (required)
-    # @return Job
-    #
-    sub jobs_job_id_delete {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('Job', $response);
+    return $_response_object;
+    
+}
 
-      
-      # verify the required parameter 'job_id' is set
-      unless (exists $args{'job_id'}) {
-        croak("Missing the required parameter 'job_id' when calling jobs_job_id_delete");
-      }
-      
+#
+# jobs_job_id_delete
+#
+# Cancels a job created that haven't been started. (Allow to cancel jobs in process.)
+# 
+# @param string $job_id ID of job that needs to be fetched (required)
+# @param string $x_oc_token Token for authentication for the current job (optional)
+# @param string $x_oc_api_key Api key for the user to filter. (optional)
+{
+    my $params = {
+    'job_id' => {
+        data_type => 'string',
+        description => 'ID of job that needs to be fetched',
+        required => '1',
+    },
+    'x_oc_token' => {
+        data_type => 'string',
+        description => 'Token for authentication for the current job',
+        required => '0',
+    },
+    'x_oc_api_key' => {
+        data_type => 'string',
+        description => 'Api key for the user to filter.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ jobs_job_id_delete } = { 
+    	summary => 'Cancels a job created that haven&#39;t been started. (Allow to cancel jobs in process.)',
+        params => $params,
+        returns => 'Job',
+        };
+}
+# @return Job
+#
+sub jobs_job_id_delete {
+    my ($self, %args) = @_;
 
-      # parse inputs
-      my $_resource_path = '/jobs/{job_id}';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    
+    # verify the required parameter 'job_id' is set
+    unless (exists $args{'job_id'}) {
+      croak("Missing the required parameter 'job_id' when calling jobs_job_id_delete");
+    }
+    
 
-      my $_method = 'DELETE';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    # parse inputs
+    my $_resource_path = '/jobs/{job_id}';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    my $_method = 'DELETE';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      
-      # header params
-      if ( exists $args{'x_oc_token'}) {
+    
+    # header params
+    if ( exists $args{'x_oc_token'}) {
         $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
-      }# header params
-      if ( exists $args{'x_oc_api_key'}) {
+    }# header params
+    if ( exists $args{'x_oc_api_key'}) {
         $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
-      }
-      # path params
-      if ( exists $args{'job_id'}) {
+    }
+    # path params
+    if ( exists $args{'job_id'}) {
         my $_base_variable = "{" . "job_id" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'job_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('Job', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # jobs_job_id_patch
-    #
-    # Modifies the job identified by the id, allows to start a created job.
-    # 
-    # @param Job $body Content of the job. (required)
-    # @param string $x_oc_token Token for authentication for the current job (required)
-    # @param string $x_oc_api_key Api key for the user to filter. (required)
-    # @param string $job_id ID of job that needs to be fetched (required)
-    # @return Job
-    #
-    sub jobs_job_id_patch {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('Job', $response);
+    return $_response_object;
+    
+}
 
-      
-      # verify the required parameter 'body' is set
-      unless (exists $args{'body'}) {
-        croak("Missing the required parameter 'body' when calling jobs_job_id_patch");
-      }
-      
-      # verify the required parameter 'job_id' is set
-      unless (exists $args{'job_id'}) {
-        croak("Missing the required parameter 'job_id' when calling jobs_job_id_patch");
-      }
-      
+#
+# jobs_job_id_patch
+#
+# Modifies the job identified by the id, allows to start a created job.
+# 
+# @param Job $body Content of the job. (required)
+# @param string $job_id ID of job that needs to be fetched (required)
+# @param string $x_oc_token Token for authentication for the current job (optional)
+# @param string $x_oc_api_key Api key for the user to filter. (optional)
+{
+    my $params = {
+    'body' => {
+        data_type => 'Job',
+        description => 'Content of the job.',
+        required => '1',
+    },
+    'job_id' => {
+        data_type => 'string',
+        description => 'ID of job that needs to be fetched',
+        required => '1',
+    },
+    'x_oc_token' => {
+        data_type => 'string',
+        description => 'Token for authentication for the current job',
+        required => '0',
+    },
+    'x_oc_api_key' => {
+        data_type => 'string',
+        description => 'Api key for the user to filter.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ jobs_job_id_patch } = { 
+    	summary => 'Modifies the job identified by the id, allows to start a created job.',
+        params => $params,
+        returns => 'Job',
+        };
+}
+# @return Job
+#
+sub jobs_job_id_patch {
+    my ($self, %args) = @_;
 
-      # parse inputs
-      my $_resource_path = '/jobs/{job_id}';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    
+    # verify the required parameter 'body' is set
+    unless (exists $args{'body'}) {
+      croak("Missing the required parameter 'body' when calling jobs_job_id_patch");
+    }
+    
+    # verify the required parameter 'job_id' is set
+    unless (exists $args{'job_id'}) {
+      croak("Missing the required parameter 'job_id' when calling jobs_job_id_patch");
+    }
+    
 
-      my $_method = 'PATCH';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    # parse inputs
+    my $_resource_path = '/jobs/{job_id}';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    my $_method = 'PATCH';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      
-      # header params
-      if ( exists $args{'x_oc_token'}) {
+    
+    # header params
+    if ( exists $args{'x_oc_token'}) {
         $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
-      }# header params
-      if ( exists $args{'x_oc_api_key'}) {
+    }# header params
+    if ( exists $args{'x_oc_api_key'}) {
         $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
-      }
-      # path params
-      if ( exists $args{'job_id'}) {
+    }
+    # path params
+    if ( exists $args{'job_id'}) {
         my $_base_variable = "{" . "job_id" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'job_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      # body params
-      if ( exists $args{'body'}) {
+    }
+    
+    my $_body_data;
+    # body params
+    if ( exists $args{'body'}) {
         $_body_data = $args{'body'};
-      }
+    }
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('Job', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # jobs_job_id_threads_get
-    #
-    # Get list of threads defined for the current job.
-    # 
-    # @param string $x_oc_token Token for authentication for the current job (required)
-    # @param string $x_oc_api_key Api key for the user to filter. (required)
-    # @param string $job_id ID of job that needs to be fetched (required)
-    # @return ARRAY[Thread]
-    #
-    sub jobs_job_id_threads_get {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('Job', $response);
+    return $_response_object;
+    
+}
 
-      
-      # verify the required parameter 'job_id' is set
-      unless (exists $args{'job_id'}) {
-        croak("Missing the required parameter 'job_id' when calling jobs_job_id_threads_get");
-      }
-      
+#
+# jobs_job_id_history_get
+#
+# Get the change history for the current job.
+# 
+# @param string $job_id ID of job that needs to be fetched (required)
+# @param string $x_oc_token Token for authentication for the current job (optional)
+# @param string $x_oc_api_key Api key for the user to filter. (optional)
+{
+    my $params = {
+    'job_id' => {
+        data_type => 'string',
+        description => 'ID of job that needs to be fetched',
+        required => '1',
+    },
+    'x_oc_token' => {
+        data_type => 'string',
+        description => 'Token for authentication for the current job',
+        required => '0',
+    },
+    'x_oc_api_key' => {
+        data_type => 'string',
+        description => 'Api key for the user to filter.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ jobs_job_id_history_get } = { 
+    	summary => 'Get the change history for the current job.',
+        params => $params,
+        returns => 'ARRAY[History]',
+        };
+}
+# @return ARRAY[History]
+#
+sub jobs_job_id_history_get {
+    my ($self, %args) = @_;
 
-      # parse inputs
-      my $_resource_path = '/jobs/{job_id}/threads';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    
+    # verify the required parameter 'job_id' is set
+    unless (exists $args{'job_id'}) {
+      croak("Missing the required parameter 'job_id' when calling jobs_job_id_history_get");
+    }
+    
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    # parse inputs
+    my $_resource_path = '/jobs/{job_id}/history';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      
-      # header params
-      if ( exists $args{'x_oc_token'}) {
+    
+    # header params
+    if ( exists $args{'x_oc_token'}) {
         $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
-      }# header params
-      if ( exists $args{'x_oc_api_key'}) {
+    }# header params
+    if ( exists $args{'x_oc_api_key'}) {
         $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
-      }
-      # path params
-      if ( exists $args{'job_id'}) {
+    }
+    # path params
+    if ( exists $args{'job_id'}) {
         my $_base_variable = "{" . "job_id" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'job_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('ARRAY[Thread]', $response);
-      return $_response_object;
-      
-  }
-  
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[History]', $response);
+    return $_response_object;
+    
+}
+
+#
+# jobs_job_id_threads_get
+#
+# Get list of threads defined for the current job.
+# 
+# @param string $job_id ID of job that needs to be fetched (required)
+# @param string $x_oc_token Token for authentication for the current job (optional)
+# @param string $x_oc_api_key Api key for the user to filter. (optional)
+{
+    my $params = {
+    'job_id' => {
+        data_type => 'string',
+        description => 'ID of job that needs to be fetched',
+        required => '1',
+    },
+    'x_oc_token' => {
+        data_type => 'string',
+        description => 'Token for authentication for the current job',
+        required => '0',
+    },
+    'x_oc_api_key' => {
+        data_type => 'string',
+        description => 'Api key for the user to filter.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ jobs_job_id_threads_get } = { 
+    	summary => 'Get list of threads defined for the current job.',
+        params => $params,
+        returns => 'ARRAY[Thread]',
+        };
+}
+# @return ARRAY[Thread]
+#
+sub jobs_job_id_threads_get {
+    my ($self, %args) = @_;
+
+    
+    # verify the required parameter 'job_id' is set
+    unless (exists $args{'job_id'}) {
+      croak("Missing the required parameter 'job_id' when calling jobs_job_id_threads_get");
+    }
+    
+
+    # parse inputs
+    my $_resource_path = '/jobs/{job_id}/threads';
+    $_resource_path =~ s/{format}/json/; # default format to json
+
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
+        $header_params->{'Accept'} = $_header_accept;
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
+
+    
+    # header params
+    if ( exists $args{'x_oc_token'}) {
+        $header_params->{'X-Oc-Token'} = $self->{api_client}->to_header_value($args{'x_oc_token'});
+    }# header params
+    if ( exists $args{'x_oc_api_key'}) {
+        $header_params->{'X-Oc-Api-Key'} = $self->{api_client}->to_header_value($args{'x_oc_api_key'});
+    }
+    # path params
+    if ( exists $args{'job_id'}) {
+        my $_base_variable = "{" . "job_id" . "}";
+        my $_base_value = $self->{api_client}->to_path_value($args{'job_id'});
+        $_resource_path =~ s/$_base_variable/$_base_value/g;
+    }
+    
+    my $_body_data;
+    
+
+    # authentication setting, if any
+    my $auth_settings = [qw()];
+
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
+        return;
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Thread]', $response);
+    return $_response_object;
+    
+}
 
 
 1;

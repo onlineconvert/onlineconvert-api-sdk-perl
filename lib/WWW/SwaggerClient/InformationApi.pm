@@ -30,17 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
-our @EXPORT_OK = qw(
-  conversions_get 
-  statuses_get 
-  
-);
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
 
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -53,119 +50,151 @@ sub new {
 
 }
 
+
+#
+# conversions_get
+#
+# Get a list of the valid conversions.
+# 
+# @param string $category Category for the conversion. (optional)
+# @param string $target Target for for the conversion. (optional)
+# @param number $page Pagination for list of elements. (optional)
+{
+    my $params = {
+    'category' => {
+        data_type => 'string',
+        description => 'Category for the conversion.',
+        required => '0',
+    },
+    'target' => {
+        data_type => 'string',
+        description => 'Target for for the conversion.',
+        required => '0',
+    },
+    'page' => {
+        data_type => 'number',
+        description => 'Pagination for list of elements.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ conversions_get } = { 
+    	summary => 'Get a list of the valid conversions.',
+        params => $params,
+        returns => 'ARRAY[Conversion]',
+        };
+}
+# @return ARRAY[Conversion]
+#
+sub conversions_get {
+    my ($self, %args) = @_;
+
     
-    #
-    # conversions_get
-    #
-    # Get a list of the valid conversions.
-    # 
-    # @param string $category Category for the conversion. (required)
-    # @param string $target Target for for the conversion. (required)
-    # @param number $page Pagination for list of elements. (required)
-    # @return ARRAY[Conversion]
-    #
-    sub conversions_get {
-      my ($self, %args) = @_;
 
-      
+    # parse inputs
+    my $_resource_path = '/conversions';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # parse inputs
-      my $_resource_path = '/conversions';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
-
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      # query params
-      if ( exists $args{'category'}) {
+    # query params
+    if ( exists $args{'category'}) {
         $query_params->{'category'} = $self->{api_client}->to_query_value($args{'category'});
-      }# query params
-      if ( exists $args{'target'}) {
+    }# query params
+    if ( exists $args{'target'}) {
         $query_params->{'target'} = $self->{api_client}->to_query_value($args{'target'});
-      }# query params
-      if ( exists $args{'page'}) {
+    }# query params
+    if ( exists $args{'page'}) {
         $query_params->{'page'} = $self->{api_client}->to_query_value($args{'page'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('ARRAY[Conversion]', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # statuses_get
-    #
-    # Get a list of the valid statuses.
-    # 
-    # @return ARRAY[Status]
-    #
-    sub statuses_get {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Conversion]', $response);
+    return $_response_object;
+    
+}
 
-      
+#
+# statuses_get
+#
+# Get a list of the valid statuses.
+# 
+{
+    my $params = {
+    };
+    __PACKAGE__->method_documentation->{ statuses_get } = { 
+    	summary => 'Get a list of the valid statuses.',
+        params => $params,
+        returns => 'ARRAY[Status]',
+        };
+}
+# @return ARRAY[Status]
+#
+sub statuses_get {
+    my ($self, %args) = @_;
 
-      # parse inputs
-      my $_resource_path = '/statuses';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    # parse inputs
+    my $_resource_path = '/statuses';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept();
-      if ($_header_accept) {
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-      
-      
-      
-      
-      my $_body_data;
-      
+    
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [qw()];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('ARRAY[Status]', $response);
-      return $_response_object;
-      
-  }
-  
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Status]', $response);
+    return $_response_object;
+    
+}
 
 
 1;
